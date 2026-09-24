@@ -1,6 +1,7 @@
 <?php
+<?php
+echo "MARKER-1\n";
 
-$tmp = '/tmp/kingsbarber';
 
 $paths = [
     $tmp,
