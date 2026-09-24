@@ -12,13 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('reference')->unique();
 
-            $table->foreignId('service_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
-
-            $table->foreignId('barber_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+            $table->unsignedBigInteger('service_id');
+            $table->unsignedBigInteger('barber_id');
 
             $table->date('booking_date');
             $table->unsignedInteger('start_minute'); // minutes from midnight
