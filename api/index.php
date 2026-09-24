@@ -1,19 +1,41 @@
 <?php
-header('Content-Type: text/plain');
 
-echo "=== Vercel PHP Diagnostic ===\n\n";
-echo "PHP version:      " . PHP_VERSION . "\n";
-echo "APP_KEY:          " . (getenv('APP_KEY') ? 'set (' . strlen(getenv('APP_KEY')) . ' chars)' : 'NOT SET') . "\n";
-echo "APP_ENV:          " . (getenv('APP_ENV') ?: 'NOT SET') . "\n";
-echo "APP_DEBUG:        " . (getenv('APP_DEBUG') ?: 'NOT SET') . "\n";
-echo "APP_URL:          " . (getenv('APP_URL') ?: 'NOT SET') . "\n";
-echo "DB_CONNECTION:    " . (getenv('DB_CONNECTION') ?: 'NOT SET') . "\n";
-echo "DB_HOST:          " . (getenv('DB_HOST') ?: 'NOT SET') . "\n";
-echo "DB_DATABASE:      " . (getenv('DB_DATABASE') ?: 'NOT SET') . "\n";
-echo "DB_USERNAME:      " . (getenv('DB_USERNAME') ?: 'NOT SET') . "\n";
-echo "DB_PASSWORD:      " . (getenv('DB_PASSWORD') ? 'set' : 'NOT SET') . "\n";
-echo "MYSQL_ATTR_SSL_CA:" . (getenv('MYSQL_ATTR_SSL_CA') ?: 'NOT SET') . "\n";
-echo "SESSION_DRIVER:   " . (getenv('SESSION_DRIVER') ?: 'NOT SET') . "\n";
-echo "\n/tmp is writable: " . (is_writable('/tmp') ? 'YES' : 'NO') . "\n";
-echo "pdo_mysql loaded: " . (extension_loaded('pdo_mysql') ? 'YES' : 'NO') . "\n";
-echo "openssl loaded:   " . (extension_loaded('openssl') ? 'YES' : 'NO') . "\n";
+$tmp = '/tmp/kingsbarber';
+
+$paths = [
+    $tmp,
+    $tmp . '/bootstrap/cache',
+    $tmp . '/storage',
+    $tmp . '/storage/framework',
+    $tmp . '/storage/framework/cache',
+    $tmp . '/storage/framework/cache/data',
+    $tmp . '/storage/framework/sessions',
+    $tmp . '/storage/framework/views',
+    $tmp . '/storage/logs',
+];
+
+foreach ($paths as $p) {
+    if (! is_dir($p)) {
+        @mkdir($p, 0755, true);
+    }
+}
+
+putenv("APP_CONFIG_CACHE={$tmp}/bootstrap/cache/config.php");
+putenv("APP_ROUTES_CACHE={$tmp}/bootstrap/cache/routes.php");
+putenv("APP_SERVICES_CACHE={$tmp}/bootstrap/cache/services.php");
+putenv("APP_PACKAGES_CACHE={$tmp}/bootstrap/cache/packages.php");
+putenv("APP_EVENTS_CACHE={$tmp}/bootstrap/cache/events.php");
+putenv("VIEW_COMPILED_PATH={$tmp}/storage/framework/views");
+putenv("LARAVEL_STORAGE_PATH={$tmp}/storage");
+
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Throwable $e) {
+    http_response_code(500);
+    header('Content-Type: text/plain');
+    echo "LARAVEL BOOTSTRAP ERROR\n\n";
+    echo "Class:   " . get_class($e) . "\n";
+    echo "Message: " . $e->getMessage() . "\n";
+    echo "File:    " . $e->getFile() . ":" . $e->getLine() . "\n\n";
+    echo substr($e->getTraceAsString(), 0, 2000);
+}
