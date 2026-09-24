@@ -28,7 +28,7 @@
         <div class="wrap">
             <div class="status"><span class="dot" id="dot"></span><span id="statusText">Checking hours</span></div>
             <button class="next" id="nextBtn" hidden></button>
-            <a class="phone" href="tel:0000000000">Call 000 000 0000</a>
+            <a class="phone" href="tel:263783885678">Call 263 783 885 678</a>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@
     <div>
       <h2 class="sec display">Find the shop</h2>
       <address>14 Marrow Street<br>Ground floor, next to the bakery</address>
-      <p class="walk">Free parking on the street after 5 pm. Call 000 000 0000 if you can't find us.</p>
+      <p class="walk">Free parking on the street after 5 pm. Call 263 783 885 678 if you can't find us.</p>
       <a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=14+Marrow+Street" target="_blank" rel="noopener">Get directions</a>
     </div>
     <div>

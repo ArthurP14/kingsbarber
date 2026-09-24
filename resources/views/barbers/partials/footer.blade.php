@@ -3,8 +3,8 @@
     <div class="grid2">
       <div>
         <h4>Contact</h4>
-        <a href="mailto:hello@example.com">hello@example.com</a>
-        <a href="tel:0000000000">000 000 0000</a>
+        <a href="info@kingsbarber.com">info@kingsbarber.com</a>
+        <a href="tel:263783885678">+263 783 885 678</a>
         <span>14 Marrow Street</span>
       </div>
       <div>
