@@ -1,16 +1,48 @@
 <?php
 
-// Vercel only allows writes to /tmp — redirect Laravel's runtime dirs there
-$_ENV['APP_CONFIG_CACHE']      = $_ENV['APP_CONFIG_CACHE']      ?? '/tmp/config.php';
-$_ENV['APP_ROUTES_CACHE']      = $_ENV['APP_ROUTES_CACHE']      ?? '/tmp/routes.php';
-$_ENV['APP_SERVICES_CACHE']    = $_ENV['APP_SERVICES_CACHE']    ?? '/tmp/services.php';
-$_ENV['APP_PACKAGES_CACHE']    = $_ENV['APP_PACKAGES_CACHE']    ?? '/tmp/packages.php';
-$_ENV['APP_EVENTS_CACHE']      = $_ENV['APP_EVENTS_CACHE']      ?? '/tmp/events.php';
-$_ENV['VIEW_COMPILED_PATH']    = $_ENV['VIEW_COMPILED_PATH']    ?? '/tmp/views';
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 
-// Ensure the views directory exists
-if (! is_dir('/tmp/views')) {
-    @mkdir('/tmp/views', 0755, true);
+// Vercel only allows writes to /tmp
+$tmp = '/tmp/kingsbarber';
+
+$paths = [
+    $tmp,
+    $tmp . '/bootstrap/cache',
+    $tmp . '/storage',
+    $tmp . '/storage/framework',
+    $tmp . '/storage/framework/cache',
+    $tmp . '/storage/framework/cache/data',
+    $tmp . '/storage/framework/sessions',
+    $tmp . '/storage/framework/views',
+    $tmp . '/storage/logs',
+];
+
+foreach ($paths as $p) {
+    if (! is_dir($p)) {
+        @mkdir($p, 0755, true);
+    }
 }
 
-require __DIR__ . '/../public/index.php';
+putenv("APP_CONFIG_CACHE={$tmp}/bootstrap/cache/config.php");
+putenv("APP_ROUTES_CACHE={$tmp}/bootstrap/cache/routes.php");
+putenv("APP_SERVICES_CACHE={$tmp}/bootstrap/cache/services.php");
+putenv("APP_PACKAGES_CACHE={$tmp}/bootstrap/cache/packages.php");
+putenv("APP_EVENTS_CACHE={$tmp}/bootstrap/cache/events.php");
+putenv("VIEW_COMPILED_PATH={$tmp}/storage/framework/views");
+putenv("LARAVEL_STORAGE_PATH={$tmp}/storage");
+
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Throwable $e) {
+    http_response_code(500);
+    header('Content-Type: text/plain');
+    echo "LARAVEL BOOTSTRAP ERROR\n";
+    echo "=======================\n\n";
+    echo "Class:   " . get_class($e) . "\n";
+    echo "Message: " . $e->getMessage() . "\n\n";
+    echo "File:    " . $e->getFile() . "\n";
+    echo "Line:    " . $e->getLine() . "\n\n";
+    echo "Trace:\n" . $e->getTraceAsString() . "\n";
+}
