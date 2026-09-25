@@ -3,6 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "build": "vite build",
         "dev": "vite"
     },
     "devDependencies": {
@@ -14,8 +15,5 @@
     },
     "optionalDependencies": {
         "@laravel/multiplex": "^0.4.1"
-    },
-    "dependencies": {
-        "vercel-php": "^0.9.0"
     }
 }
