@@ -1,18 +1,19 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "",
-  "outputDirectory": "",
-  "functions": {
-    "api/index.php": {
-      "runtime": "vercel-php@0.9.0",
-      "memory": 1024,
-      "maxDuration": 30
+  "builds": [
+    {
+      "src": "api/index.php",
+      "use": "vercel-php@0.9.0"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
-  },
+  ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|ttf|woff|woff2|eot|otf|webp|avif|txt|map|json))$", "dest": "/public/$1" },
+    { "src": "/build/(.*)", "dest": "/public/build/$1" },
+    { "src": "/images/(.*)", "dest": "/public/images/$1" },
+    { "src": "/(favicon.ico|robots.txt)", "dest": "/public/$1" },
     { "src": "/(.*)", "dest": "/api/index.php" }
   ]
 }
