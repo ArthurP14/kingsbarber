@@ -135,9 +135,9 @@
          ========================================================= --}}
 
     <script
-        src="{{ asset('js/ironline.js') }}?v={{ time() }}"
-        defer
-    ></script>
+        src="https://kingsbarber-production.up.railway.app/js/ironline.js?v={{ time() }}"
+        defer>
+     </script>
 
 </body>
 </html>
