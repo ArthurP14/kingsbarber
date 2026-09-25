@@ -17,3 +17,14 @@ Route::prefix('api')->group(function () {
     Route::get('/availability', [BookingController::class, 'availability'])->name('api.availability');
     Route::post('/bookings',    [BookingController::class, 'store'])->name('api.bookings');
 });
+
+Route::get('/debug-https', function () {
+    return response()->json([
+        'environment' => app()->environment(),
+        'app_url' => config('app.url'),
+        'request_scheme' => request()->getScheme(),
+        'is_secure' => request()->isSecure(),
+        'url_root' => url('/'),
+        'asset_test' => asset('js/ironline.js'),
+    ]);
+});
