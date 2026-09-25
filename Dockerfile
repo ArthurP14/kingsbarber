@@ -1,10 +1,9 @@
-FROM php:8.5-cli-alpine
+FROM dunglas/frankenphp:php8.5-alpine
 
 RUN apk add --no-cache \
-    git curl zip unzip libpng-dev oniguruma-dev libxml2-dev \
-    nodejs npm bash
+    git curl zip unzip bash nodejs npm
 
-RUN docker-php-ext-install pdo_mysql mbstring bcmath
+RUN install-php-extensions pdo_mysql mbstring bcmath opcache
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -13,17 +12,16 @@ WORKDIR /app
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
-
 RUN npm ci && npm run build && rm -rf node_modules
 
 RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+COPY Caddyfile /etc/frankenphp/Caddyfile
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENV SERVER_NAME=:8080
 EXPOSE 8080
 
-CMD php artisan migrate --force && \
-    php artisan db:seed --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan serve --host=0.0.0.0 --port=8080
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

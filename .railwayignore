@@ -1,0 +1,10 @@
+/vendor
+/node_modules
+/.env
+.env.local
+.env.railway
+storage/logs/*.log
+.git
+api
+vercel.json
+.vercelignore
