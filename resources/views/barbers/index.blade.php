@@ -123,7 +123,7 @@ window.__BOOT__ = {
      ========================================================= --}}
 
 <script
-    src="{{ secure_asset('js/ironline.js') }}?v={{ time() }}"
+    src="https://kingsbarber-production.up.railway.app/js/ironline.js?v={{ time() }}"
     defer>
 </script>
 
